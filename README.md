@@ -1,4 +1,17 @@
-# GBSD — Guard BSD Microkernel Operating System
+&nbsp;
+<div align="center">
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <img src="docs/img/Logo%20GBSD%20na%20tle%20granatowym.png" width="100" height="100" style="margin-bottom: 2px;">
+    <h2 style="margin-top: 0;">Guard BSD</h2>
+  </div>
+</div>
+
+&nbsp;
+
+&nbsp;
+
+# Guard BSD Microkernel Operating System
+
 **Version 1.0.0-25-amd64**  
 **Release Date:** 25 November 2025  
 **License:** BSD 3-Clause
