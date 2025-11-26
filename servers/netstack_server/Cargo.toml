@@ -1,0 +1,14 @@
+[package]
+name = "netstack_server"
+version = "0.1.0"
+edition = "2021"
+description = "GBSD netstack_server - TCP/IP network stack"
+license = "BSD-3-Clause"
+publish = false
+
+[[bin]]
+name = "netstack_server"
+path = "src/main.rs"
+
+[dependencies]
+
