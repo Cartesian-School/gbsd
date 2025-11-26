@@ -1,32 +1,32 @@
 # GBSD — Guard BSD Microkernel Operating System
 **Version 1.0.0-25-amd64**  
 **Release Date:** 25 November 2025  
-**License:** BSD 3-Clause  
+**License:** BSD 3-Clause
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#overview)  
-2. [Design Principles](#design-principles)  
-3. [System Architecture](#system-architecture)  
-4. [Key Components](#key-components)  
-5. [Features](#features)  
-6. [Performance](#performance)  
-7. [Building the System](#building-the-system)  
-8. [Running GBSD](#running-gbsd)  
-9. [Directory Structure](#directory-structure)  
-10. [API Reference](#api-reference)  
-    - 10.1 [Kernel Syscalls — Full Specification](#kernel-syscalls--full-specification)  
-    - 10.1.5 [Capability Rights — Full Specification](#capability-rights--full-specification)  
-    - 10.2 [Capability-Based Ports](#capability-based-ports)  
-    - 10.3 [Userspace Server IPC Contracts](#userspace-server-ipc-contracts)  
-    - 10.4 [Filesystem Interface](#filesystem-interface)  
-    - 10.5 [Network Sockets API](#network-sockets-api)  
-    - 10.6 [Wayland Protocol Extensions](#wayland-protocol-extensions)  
-11. [Contributing](#contributing)  
-12. [License](#license)  
-13. [Authors & Acknowledgments](#authors--acknowledgments)  
+1. [Overview](#overview)
+2. [Design Principles](#design-principles)
+3. [System Architecture](#system-architecture)
+4. [Key Components](#key-components)
+5. [Features](#features)
+6. [Performance](#performance)
+7. [Building the System](#building-the-system)
+8. [Running GBSD](#running-gbsd)
+9. [Directory Structure](#directory-structure)
+10. [API Reference](#api-reference)
+    - 10.1 [Kernel Syscalls — Full Specification](#kernel-syscalls--full-specification)
+    - 10.1.5 [Capability Rights — Full Specification](#capability-rights--full-specification)
+    - 10.2 [Capability-Based Ports](#capability-based-ports)
+    - 10.3 [Userspace Server IPC Contracts](#userspace-server-ipc-contracts)
+    - 10.4 [Filesystem Interface](#filesystem-interface)
+    - 10.5 [Network Sockets API](#network-sockets-api)
+    - 10.6 [Wayland Protocol Extensions](#wayland-protocol-extensions)
+11. [Contributing](#contributing)
+12. [License](#license)
+13. [Authors & Acknowledgments](#authors--acknowledgments)
 
 ---
 
@@ -40,13 +40,13 @@ GBSD follows a strict microkernel philosophy: only the minimal mechanisms reside
 
 ## 2. Design Principles
 
-- **Minimal Kernel** – Less than 8 KB of privileged code  
-- **Everything in Userspace** – Drivers, filesystems, network, graphics  
-- **Capability-Based Security** – No ambient authority  
-- **Fault Isolation** – Crash of any server does not affect the rest of the system  
-- **Crash-Resilient Filesystem** – ext4 with full JBD2 journaling  
-- **Modern Graphics** – Wayland + OpenGL 4.6 + Vulkan 1.3 in userspace  
-- **High Performance** – Near-native speed on real hardware and virtualization  
+- **Minimal Kernel** – Less than 8 KB of privileged code
+- **Everything in Userspace** – Drivers, filesystems, network, graphics
+- **Capability-Based Security** – No ambient authority
+- **Fault Isolation** – Crash of any server does not affect the rest of the system
+- **Crash-Resilient Filesystem** – ext4 with full JBD2 journaling
+- **Modern Graphics** – Wayland + OpenGL 4.6 + Vulkan 1.3 in userspace
+- **High Performance** – Near-native speed on real hardware and virtualization
 
 ---
 
@@ -54,21 +54,23 @@ GBSD follows a strict microkernel philosophy: only the minimal mechanisms reside
 
 ```
 
-+---------------------------+
-|        GBSD Kernel        |   < 8 KB, ring-0
-|   9 syscalls + IPC + VM   |
-+---------------------------+
-↑ capability-based messages
-┌───────────┴─────────────────────────────────────┐
-│               Userspace Servers                 │
-│  init_server (PID 1)                            │
-│  log_server, scheduler_server, vfs_server      │
-│  ext4_server (with JBD2), netstack_server      │
-│  sshd, drm_server, mesa_server, gwc (Wayland)  │
-│  gsh (shell), gterm, gpanel, applications      │
-└─────────────────────────────────────────────────┘
+               +---------------------------+
+               |        GBSD Kernel        |   < 8 KB, ring-0
+               |   9 syscalls + IPC + VM   |
+               +---------------------------+
+                            ↑ 
+                capability-based messages
+                            │
+    ┌───────────────────────┴─────────────────────────┐
+    │               Userspace Servers                 │
+    │  init_server (PID 1)                            │
+    │  log_server, scheduler_server, vfs_server       │
+    │  ext4_server (with JBD2), netstack_server       │
+    │  sshd, drm_server, mesa_server, gwc (Wayland)   │
+    │  gsh (shell), gterm, gpanel, applications       │
+    └─────────────────────────────────────────────────┘
 
-````
+```
 
 All inter-process communication uses **ports** — typed, revocable capabilities.
 
@@ -83,8 +85,8 @@ All inter-process communication uses **ports** — typed, revocable capabilities
 - Full x86_64 context switching with FPU/SSE/AVX preservation
 
 ### Process Management
-- scheduler_server – 100 Hz round-robin (userspace policy) 
-- Context switch performed entirely in kernel (safe) 
+- scheduler_server – 100 Hz round-robin (userspace policy)
+- Context switch performed entirely in kernel (safe)
 - Tasks are fully isolated address spaces
 
 ### Filesystems
@@ -118,28 +120,28 @@ All inter-process communication uses **ports** — typed, revocable capabilities
 
 ## 5. Features
 
-### 5.1 Full IPv4/IPv6 Support 
+### 5.1 Full IPv4/IPv6 Support
 
-- Automatic configuration via DHCP/DHCPv6 + SLAAC 
-- Native ping6, telnet, wget, ssh 
- 
-### 5.2 SSH Server 
+- Automatic configuration via DHCP/DHCPv6 + SLAAC
+- Native ping6, telnet, wget, ssh
 
-- SSH-2.0 compatible - ed25519, RSA, chacha20-poly1305 
-- Key-only authentication 
- 
-### 5.3 Wayland + OpenGL 4.6 + Vulkan 1.3 
- 
-- Hardware acceleration on Intel, AMD, NVIDIA, virtio-gpu 
-- Full Mesa stack in userspace 
-- Games: DOOM Eternal, Cyberpunk 2077 (DXVK), Unreal Engine 5 
- 
-### 5.4 ext4 with Full JBD2 Journaling 
+### 5.2 SSH Server
 
-- Survives power loss and kernel panic 
-- Atomic operations (mkdir, rename, write) 
+- SSH-2.0 compatible - ed25519, RSA, chacha20-poly1305
+- Key-only authentication
 
-### 5.5 High-Performance Gaming 
+### 5.3 Wayland + OpenGL 4.6 + Vulkan 1.3
+
+- Hardware acceleration on Intel, AMD, NVIDIA, virtio-gpu
+- Full Mesa stack in userspace
+- Games: DOOM Eternal, Cyberpunk 2077 (DXVK), Unreal Engine 5
+
+### 5.4 ext4 with Full JBD2 Journaling
+
+- Survives power loss and kernel panic
+- Atomic operations (mkdir, rename, write)
+
+### 5.5 High-Performance Gaming
 
 | Game | Renderer | Performance (RX 7900 XTX) | 
 |---------------------|--------------|----------------------------| 
@@ -225,11 +227,11 @@ API Reference GBSD provides a minimal, secure, and capability-oriented programmi
 
 All privileged operations are mediated through **9 syscalls** and **capability-based message passing**.
 
-### 10.1.1 Kernel Syscalls — Full Specification (with Error Codes) 
+### 10.1.1 Kernel Syscalls — Full Specification (with Error Codes)
 
-GBSD kernel exposes **exactly 9 syscalls**. 
+GBSD kernel exposes **exactly 9 syscalls**.
 
-This is intentional: minimal, auditable, and capability-centric. 
+This is intentional: minimal, auditable, and capability-centric.
 
 All syscalls are invoked via the syscall instruction on x86_64.
 
@@ -240,29 +242,29 @@ All syscalls are invoked via the syscall instruction on x86_64.
 | 3 | port_receive | 3 | rdi: port, rsi: buffer | bytes: usize | E_PORT_INVALID, E_NO_RIGHTS | Blocking receive | 
 | 4 | vm_allocate | 4 | rdi: hint, rsi: size, rdx: flags | addr: usize | E_NOMEM, E_INVAL, E_ALIGN | Allocate memory | 
 | 5 | vm_deallocate | 5 | rdi: addr, rsi: size | 0 | E_INVAL, E_NOT_OWNER | Free memory | | 6 | cap_move 
-| 6 | rdi: src, rsi: dst, rdx: rights | 0 | E_CAP_INVALID, E_NO_RIGHTS | Transfer capability | 
+| 6 | rdi: src, rsi: dst, rdx: rights | 0 | E_CAP_INVALID, E_NO_RIGHTS | Transfer capability |
 | 7 | sched_spawn | 7 | rdi: entry, rsi: stack, rdx: name | pid: u32 | E_NOMEM, E_INVAL, E_NO_RIGHTS | Create task | 
 | 8 | sched_yield | 8 | — | 0 | E_NO_RIGHTS | Yield CPU | 
 | 9 | sched_switch | 9 | rdi: target_pid | — (noreturn) | E_INVAL, E_NO_RIGHTS, E_NOT_RUNNABLE | Immediate switch | 
 
 --- 
 
-### 10.1.2 GBSD Kernel Error Codes (u64) | Code | Name | Value (hex) | Meaning | 
-|------|----------------------|-----------------|---------| 
-| 0 | E_OK | 0x00000000 | Success | 
-| 1 | E_INVAL | 0xFFFFFFFF_00000001 | Invalid argument | 
-| 2 | E_NOMEM | 0xFFFFFFFF_00000002 | Out of memory | 
-| 3 | E_PORT_INVALID | 0xFFFFFFFF_00000003 | Invalid or destroyed port | 
-| 4 | E_PORT_FULL | 0xFFFFFFFF_00000004 | Port queue full | 
-| 5 | E_NO_RIGHTS | 0xFFFFFFFF_00000005 | Missing required capability right | 
-| 6 | E_CAP_INVALID | 0xFFFFFFFF_00000006 | Invalid capability | 
-| 7 | E_ALIGN | 0xFFFFFFFF_00000007 | Misaligned address/size | 
-| 8 | E_NOT_OWNER | 0xFFFFFFFF_00000008 | Not owner of memory/capability | 
-| 9 | E_NOT_RUNNABLE | 0xFFFFFFFF_00000009 | Target task not runnable | 
-| 10 | E_NO_RIGHTS_SCHED | 0xFFFFFFFF_0000000A | Only scheduler_server may switch | 
-| 11 | E_TOO_BIG | 0xFFFFFFFF_0000000B | Message/size exceeds limit | 
+### 10.1.2 GBSD Kernel Error Codes (u64) | Code | Name | Value (hex) | Meaning |
+|------|----------------------|-----------------|---------|
+| 0 | E_OK | 0x00000000 | Success |
+| 1 | E_INVAL | 0xFFFFFFFF_00000001 | Invalid argument |
+| 2 | E_NOMEM | 0xFFFFFFFF_00000002 | Out of memory |
+| 3 | E_PORT_INVALID | 0xFFFFFFFF_00000003 | Invalid or destroyed port |
+| 4 | E_PORT_FULL | 0xFFFFFFFF_00000004 | Port queue full |
+| 5 | E_NO_RIGHTS | 0xFFFFFFFF_00000005 | Missing required capability right |
+| 6 | E_CAP_INVALID | 0xFFFFFFFF_00000006 | Invalid capability |
+| 7 | E_ALIGN | 0xFFFFFFFF_00000007 | Misaligned address/size |
+| 8 | E_NOT_OWNER | 0xFFFFFFFF_00000008 | Not owner of memory/capability |
+| 9 | E_NOT_RUNNABLE | 0xFFFFFFFF_00000009 | Target task not runnable |
+| 10 | E_NO_RIGHTS_SCHED | 0xFFFFFFFF_0000000A | Only scheduler_server may switch |
+| 11 | E_TOO_BIG | 0xFFFFFFFF_0000000B | Message/size exceeds limit |
 
-> > **All error values are in the upper 32 bits set to 0xFFFFFFFF** > **Success is always 0 or a valid positive value** 
+> > **All error values are in the upper 32 bits set to 0xFFFFFFFF** > **Success is always 0 or a valid positive value**
 > > **This allows easy detection: if (result >> 32) == 0xFFFFFFFF → error** --- ### Error Code Example (Rust)
 
 ```rust
@@ -295,7 +297,7 @@ panic!("Failed to allocate port");
 
 --- 
 
-### 10.1.3 Syscall-Specific Error Behavior 
+### 10.1.3 Syscall-Specific Error Behavior
 
 | Syscall | Common Errors | 
 |-------------------|-------------| 
@@ -357,7 +359,7 @@ Capabilities are required for all operations; no ambient authority exists.
 
 ---
 
-### ### 10.2 Capability-Based Ports Ports are the only way to communicate between processes. 
+### ### 10.2 Capability-Based Ports Ports are the only way to communicate between processes.
 
 | Right Bit | Meaning | 
 |----------|-------------------| 
@@ -379,9 +381,9 @@ sys_port_send(vfs_port, msg, 8);
 * VFS, network stack, DRM/GPU, and other servers define **port message formats**
 * Example: VFS `open`, `read`, `write`, `mkdir`, `readdir`, `stat`
 
-Userspace Server IPC Contracts Each server defines a **message format** using [u64; 8] arrays. 
+Userspace Server IPC Contracts Each server defines a **message format** using [u64; 8] arrays.
 
-#### VFS Server (vfs_server) 
+#### VFS Server (vfs_server)
 
 | Op | msg[0] | msg[1] | msg[2] | msg[3] | Reply | 
 |----|--------|------------------|------------|--------------|-------| 
@@ -393,7 +395,7 @@ Userspace Server IPC Contracts Each server defines a **message format** using [u
 | Readdir| 6 | fd | *mut DirEnt| count | entries | 
 | Stat | 7 | *const cstr | *mut Stat| reply_port | 0 / !0 | 
 
-#### Network Stack (netstack_server) 
+#### Network Stack (netstack_server)
 
 | Op | Description | 
 |----|-----------| 
@@ -455,7 +457,7 @@ Protocols: `IPPROTO_TCP`, `IPPROTO_UDP`, `IPPROTO_RAW`.
 * GPU and input securely delegated via capabilities
 * Example: zero-copy GPU buffer sharing for Wayland surfaces
 
-**GBSD implements the full Wayland core protocol plus:** 
+**GBSD implements the full Wayland core protocol plus:**
 
 | Extension | Version | Purpose | 
 |------------------------------|---------|-------| 
@@ -467,11 +469,11 @@ Protocols: `IPPROTO_TCP`, `IPPROTO_UDP`, `IPPROTO_RAW`.
 | wp_viewporter | 1 | Scaling | 
 | zwp_pointer_gestures_v1 | 3 | Gestures | 
 
-Custom GBSD extensions: 
+Custom GBSD extensions:
 
-- gbsd_gpu_direct_v1 
-- zero-copy GPU buffer sharing 
-- gbsd_input_inhibit_v1 
+- gbsd_gpu_direct_v1
+- zero-copy GPU buffer sharing
+- gbsd_input_inhibit_v1
 - fullscreen inhibit
 
 ---
