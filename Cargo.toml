@@ -1,0 +1,29 @@
+
+# gbsd/Cargo.toml
+[workspace]
+members = [
+    "kernel",
+    # Bootstrap services (Phase 2)
+    "servers/init_server",
+    "servers/log_server",
+    "servers/scheduler_server",
+    # Core services (Phase 3)
+    "servers/vfs_server",
+    "servers/ext4_server",
+    "servers/netstack_server",
+    # Services (future phases)
+    # "servers/sshd",
+    # "servers/drm_server",
+    # "servers/mesa_server",
+    # "servers/gwc",
+    # "servers/gsh",
+    #
+    # # Apps (future phases)
+    # "apps/*",
+]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"

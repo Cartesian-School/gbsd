@@ -1,0 +1,14 @@
+[package]
+name = "libgbsd"
+version = "0.1.0"
+edition = "2021"
+description = "GBSD common library - syscall definitions and utilities"
+license = "BSD-3-Clause"
+publish = false
+
+[lib]
+name = "libgbsd"
+path = "src/lib.rs"
+
+[dependencies]
+

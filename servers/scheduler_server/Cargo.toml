@@ -1,0 +1,14 @@
+[package]
+name = "scheduler_server"
+version = "0.1.0"
+edition = "2021"
+description = "GBSD scheduler_server - preemptive scheduling"
+license = "BSD-3-Clause"
+publish = false
+
+[[bin]]
+name = "scheduler_server"
+path = "src/main.rs"
+
+[dependencies]
+

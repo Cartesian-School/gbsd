@@ -1,0 +1,14 @@
+[package]
+name = "log_server"
+version = "0.1.0"
+edition = "2021"
+description = "GBSD log_server - centralized logging"
+license = "BSD-3-Clause"
+publish = false
+
+[[bin]]
+name = "log_server"
+path = "src/main.rs"
+
+[dependencies]
+

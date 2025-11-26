@@ -1,0 +1,14 @@
+[package]
+name = "init_server"
+version = "0.1.0"
+edition = "2021"
+description = "GBSD init_server - PID 1, bootstrap and service management"
+license = "BSD-3-Clause"
+publish = false
+
+[[bin]]
+name = "init_server"
+path = "src/main.rs"
+
+[dependencies]
+
