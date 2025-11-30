@@ -12,6 +12,8 @@
 
 # Guard BSD Microkernel Operating System
 
+## Educational Operating System Project
+
 **Version 1.0.0-25-amd64**  
 **Release Date:** 25 November 2025  
 **License:** BSD 3-Clause
