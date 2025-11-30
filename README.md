@@ -2,7 +2,7 @@
 <div align="center">
   <div style="display: flex; flex-direction: column; align-items: center;">
     <img src="docs/img/Logo%20GBSD%20na%20tle%20granatowym.png" width="100" height="100" style="margin-bottom: 2px;">
-    <h2 style="margin-top: 0;">Guard BSD</h2>
+    <h2 style="margin-top: 0;">GuardBSD Edu</h2>
   </div>
 </div>
 
@@ -10,7 +10,7 @@
 
 &nbsp;
 
-# Guard BSD Microkernel Operating System
+# GuardBSD Edu - Microkernel Operating System
 
 ## 🦀 Rust-based Educational Operating System Project
 
